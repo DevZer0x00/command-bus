@@ -7,6 +7,6 @@ namespace DevZer0x00\CommandBus\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class TransactionalWrapped
+class TransactionalWrapper
 {
 }

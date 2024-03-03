@@ -7,7 +7,7 @@ namespace DevZer0x00\CommandBus\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class LockWrapped
+class LockWrapper
 {
     public function __construct(
         public array $commandFields = [],
