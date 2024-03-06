@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper;
 
-use DevZer0x00\CommandBus\Attribute\TransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\LockWrapper;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 
-interface TransactionalHandlerWrapperFactoryInterface
+interface LockHandlerWrapperFactoryInterface
 {
     public function factory(
-        TransactionalWrapper $attribute,
+        LockWrapper $attribute,
         CommandHandlerInterface $wrappedHandler,
         CommandHandlerInterface $originalHandler
     ): HandlerWrapperInterface;
