@@ -11,12 +11,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Devzer0x00\\CommandBus\\": "src/"
-        },
-        "autoload-dev": {
-            "psr-4": {
-                "Devzer0x00\\CommandBus\\": "tests"
-            }
+            "DevZer0x00\\CommandBus\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "require": {
