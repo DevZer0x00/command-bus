@@ -6,7 +6,11 @@ namespace DevZer0x00\CommandBus\Wrapper;
 
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use Psr\Container\ContainerInterface;
+use ReflectionAttribute;
 use ReflectionClass;
+
+use function array_combine;
+use function array_map;
 
 readonly class WrapperProcessor implements WrapperProcessorInterface
 {
@@ -23,16 +27,23 @@ readonly class WrapperProcessor implements WrapperProcessorInterface
 
         $reflClass = new ReflectionClass($originalHandler);
         $attributes = $reflClass->getAttributes();
+        $attributes = array_combine(
+            array_map(
+                fn(ReflectionAttribute $attribute) => $attribute->getName(),
+                $attributes
+            ),
+            $attributes
+        );
 
-        foreach ($attributes as $attribute) {
-            if (($factoryClass = $this->wrapperFactoriesMap[$attribute->getName()] ?? null) === null) {
+        foreach ($this->wrapperFactoriesMap as $attributeClass => $factoryClass) {
+            if (!isset($attributes[$attributeClass])) {
                 continue;
             }
 
             /** @var HandlerWrapperFactoryInterface $factory */
             $factory = $this->container->get($factoryClass);
             $handler = $factory->factory(
-                attribute: $attribute,
+                attribute: $attributes[$attributeClass],
                 wrappedHandler: $handler,
                 originalHandler: $originalHandler
             );

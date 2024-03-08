@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\unit\Wrapper;
 
+use DevZer0x00\CommandBus\Attribute\LockWrapper;
 use DevZer0x00\CommandBus\Attribute\TransactionalWrapper;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
@@ -13,6 +14,7 @@ use DevZer0x00\CommandBus\Wrapper\WrapperProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Tests\unit\Stubs\WrappedLockTransactionHandlerStub;
 use Tests\unit\Stubs\WrappedTransactionAttributeHandlerStub;
 
 class WrapperProcessorTest extends TestCase
@@ -38,29 +40,83 @@ class WrapperProcessorTest extends TestCase
 
     public function testTransactionAttribute()
     {
-        $wrapperFactory = $this->createMock(HandlerWrapperFactoryInterface::class);
-
-        $wrapper = $this->createMock(HandlerWrapperInterface::class);
-        $wrapperFactory
+        $transactionWrapperFactory = $this->createMock(HandlerWrapperFactoryInterface::class);
+        $transactionWrapper = $this->createMock(HandlerWrapperInterface::class);
+        $transactionWrapperFactory
             ->expects($this->once())
             ->method('factory')
-            ->willReturn($wrapper);
+            ->willReturn($transactionWrapper);
+
+        $lockWrapperFactory = $this->createMock(HandlerWrapperFactoryInterface::class);
+        $lockWrapper = $this->createMock(HandlerWrapperInterface::class);
+        $lockWrapperFactory
+            ->expects($this->never())
+            ->method('factory')
+            ->willReturn($lockWrapper);
 
         $this->container
             ->expects($this->once())
             ->method('get')
-            ->with($wrapperFactory::class)
-            ->willReturn($wrapperFactory);
+            ->willReturnCallback(function ($arg) use ($lockWrapperFactory, $transactionWrapperFactory) {
+                $factories = [
+                    'l' => $lockWrapperFactory,
+                    't' => $transactionWrapperFactory,
+                ];
+
+                return $factories[$arg];
+            });
 
         $wrapperProcessor = new WrapperProcessor(
             container: $this->container,
             wrapperFactoriesMap: [
-                TransactionalWrapper::class => $wrapperFactory::class,
+                TransactionalWrapper::class => 't',
+                LockWrapper::class => 'l',
             ]
         );
 
         $handler = new WrappedTransactionAttributeHandlerStub();
 
-        $this->assertSame($wrapper, $wrapperProcessor->wrap($handler));
+        $this->assertSame($transactionWrapper, $wrapperProcessor->wrap($handler));
+    }
+
+    public function testLockTransactionAttributeWithPriority1()
+    {
+        $transactionWrapperFactory = $this->createMock(HandlerWrapperFactoryInterface::class);
+        $transactionWrapper = $this->createMock(HandlerWrapperInterface::class);
+        $transactionWrapperFactory
+            ->expects($this->once())
+            ->method('factory')
+            ->willReturn($transactionWrapper);
+
+        $lockWrapperFactory = $this->createMock(HandlerWrapperFactoryInterface::class);
+        $lockWrapper = $this->createMock(HandlerWrapperInterface::class);
+        $lockWrapperFactory
+            ->expects($this->once())
+            ->method('factory')
+            ->willReturn($lockWrapper);
+
+        $this->container
+            ->expects($this->atLeast(2))
+            ->method('get')
+            ->willReturnCallback(function ($arg) use ($lockWrapperFactory, $transactionWrapperFactory) {
+                $factories = [
+                    'l' => $lockWrapperFactory,
+                    't' => $transactionWrapperFactory,
+                ];
+
+                return $factories[$arg];
+            });
+
+        $wrapperProcessor = new WrapperProcessor(
+            container: $this->container,
+            wrapperFactoriesMap: [
+                TransactionalWrapper::class => 't',
+                LockWrapper::class => 'l',
+            ]
+        );
+
+        $handler = new WrappedLockTransactionHandlerStub();
+
+        $this->assertSame($lockWrapper, $wrapperProcessor->wrap($handler));
     }
 }
