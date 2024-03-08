@@ -8,7 +8,9 @@ use DevZer0x00\CommandBus\CommandHandlerInterface;
 
 interface HandlerWrapperInterface extends CommandHandlerInterface
 {
-    public function preHandle(): void;
+    public function preHandle(int $nestingLevel): void;
 
-    public function postHandle(): void;
+    public function handle($commandObject): mixed;
+
+    public function postHandle(int $nestingLevel): void;
 }

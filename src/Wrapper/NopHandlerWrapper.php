@@ -12,16 +12,16 @@ readonly class NopHandlerWrapper implements HandlerWrapperInterface
     {
     }
 
-    public function preHandle(): void
+    public function preHandle(int $nestingLevel): void
     {
     }
 
-    public function handle(object $command): mixed
+    public function handle($commandObject): mixed
     {
-        return $this->handler->handle($command);
+        return $this->handler->handle($commandObject);
     }
 
-    public function postHandle(): void
+    public function postHandle(int $nestingLevel): void
     {
     }
 }
