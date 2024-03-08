@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\unit\Stubs;
+namespace Tests\Unit\Stubs;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
 use DevZer0x00\CommandBus\Attribute\TransactionalWrapper;
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 
 #[LockWrapper]
 #[TransactionalWrapper]
-class WrappedLockTransactionHandlerStub implements CommandHandlerInterface
+class WrappedLockTransactionHandlerStub implements HandlerInterface
 {
 }

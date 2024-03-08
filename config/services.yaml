@@ -1,0 +1,3 @@
+services:
+  DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface:
+    class: DevZer0x00\CommandBus\Wrapper\WrapperProcessor

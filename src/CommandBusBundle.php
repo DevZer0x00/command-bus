@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus;
 
+use DevZer0x00\CommandBus\DependencyInjection\CommandBusExtension;
 use DevZer0x00\CommandBus\DependencyInjection\Compiler\CommandHandlerPass;
+use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class CommandBusBundle extends AbstractBundle
@@ -16,7 +19,17 @@ class CommandBusBundle extends AbstractBundle
 
         $container
             ->addCompilerPass(new CommandHandlerPass())
-            ->registerForAutoconfiguration(CommandHandlerInterface::class)
+            ->registerForAutoconfiguration(HandlerInterface::class)
             ->addTag('app.command_handler');
+
+        $container
+            ->addCompilerPass(new CommandHandlerPass())
+            ->registerForAutoconfiguration(HandlerWrapperFactoryInterface::class)
+            ->addTag('app.command_handler.wrapper_factory');
+    }
+
+    public function getContainerExtension(): ?ExtensionInterface
+    {
+        return new CommandBusExtension();
     }
 }

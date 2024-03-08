@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper;
 
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 use ReflectionAttribute;
 
 interface HandlerWrapperFactoryInterface
@@ -12,6 +12,6 @@ interface HandlerWrapperFactoryInterface
     public function factory(
         ReflectionAttribute $attribute,
         HandlerWrapperInterface $wrappedHandler,
-        CommandHandlerInterface $originalHandler
+        HandlerInterface $originalHandler
     ): HandlerWrapperInterface;
 }

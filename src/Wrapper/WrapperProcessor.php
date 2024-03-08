@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper;
 
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -20,7 +20,7 @@ readonly class WrapperProcessor implements WrapperProcessorInterface
     ) {
     }
 
-    public function wrap(CommandHandlerInterface $handler): HandlerWrapperInterface
+    public function wrap(HandlerInterface $handler): HandlerWrapperInterface
     {
         $originalHandler = $handler;
         $handler = new NopHandlerWrapper($handler);

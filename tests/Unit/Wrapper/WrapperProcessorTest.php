@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\unit\Wrapper;
+namespace Tests\Unit\Wrapper;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
 use DevZer0x00\CommandBus\Attribute\TransactionalWrapper;
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\NopHandlerWrapper;
@@ -33,7 +33,7 @@ class WrapperProcessorTest extends TestCase
             wrapperFactoriesMap: []
         );
 
-        $handler = $this->createMock(CommandHandlerInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
 
         $this->assertInstanceOf(NopHandlerWrapper::class, $wrapperProcessor->wrap($handler));
     }

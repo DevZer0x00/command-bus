@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus;
 
+use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-class ContainerCommandBus extends AbstractCommandBus
+class ContainerBus extends AbstractBus
 {
     public function __construct(
         private readonly ContainerInterface $container,
+        WrapperProcessorInterface $wrapperProcessor,
         private readonly array $handlerMap,
     ) {
+        parent::__construct(wrapperProcessor: $wrapperProcessor);
     }
 
-    protected function getHandler(mixed $command): CommandHandlerInterface
+    protected function getHandler(mixed $command): HandlerInterface
     {
         return $this->container->get(
             $this->getHandlerId($command)

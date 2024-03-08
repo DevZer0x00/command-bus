@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\unit\Wrapper;
+namespace Tests\Unit\Wrapper;
 
-use DevZer0x00\CommandBus\AbstractCommandBus;
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\AbstractBus;
+use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,7 +29,7 @@ class AbstractCommandBusTest extends TestCase
             ->method('wrap')
             ->willReturn($handlerWrapper);
 
-        $commandBus = $this->getCommandBus($wrapperProcessor, $this->createMock(CommandHandlerInterface::class));
+        $commandBus = $this->getCommandBus($wrapperProcessor, $this->createMock(HandlerInterface::class));
         $result = $commandBus->handle(new class {
         });
 
@@ -38,17 +38,17 @@ class AbstractCommandBusTest extends TestCase
 
     private function getCommandBus(
         WrapperProcessorInterface|MockObject $wrapperProcessor,
-        CommandHandlerInterface $commandHandler,
-    ): AbstractCommandBus {
-        return new class($wrapperProcessor, $commandHandler) extends AbstractCommandBus {
+        HandlerInterface $commandHandler,
+    ): AbstractBus {
+        return new class($wrapperProcessor, $commandHandler) extends AbstractBus {
             public function __construct(
                 WrapperProcessorInterface $wrapperProcessor,
-                private readonly CommandHandlerInterface $commandHandler
+                private readonly HandlerInterface $commandHandler
             ) {
                 parent::__construct($wrapperProcessor);
             }
 
-            protected function getHandler(mixed $command): CommandHandlerInterface
+            protected function getHandler(mixed $command): HandlerInterface
             {
                 return $this->commandHandler;
             }

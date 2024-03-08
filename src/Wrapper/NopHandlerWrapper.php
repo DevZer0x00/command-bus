@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper;
 
-use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 
 readonly class NopHandlerWrapper implements HandlerWrapperInterface
 {
-    public function __construct(private CommandHandlerInterface $handler)
+    public function __construct(private HandlerInterface $handler)
     {
     }
 

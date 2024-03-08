@@ -7,7 +7,7 @@ namespace DevZer0x00\CommandBus;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 
-abstract class AbstractCommandBus implements CommandBusInterface
+abstract class AbstractBus implements BusInterface
 {
     protected int $nestingLevel = 0;
 
@@ -23,19 +23,19 @@ abstract class AbstractCommandBus implements CommandBusInterface
         $handler = $this->getHandler($command);
         $wrappedHandler = $this->wrapHandler($handler);
 
-        $wrappedHandler->preHandle();
+        $wrappedHandler->preHandle($this->nestingLevel);
         $result = $wrappedHandler->handle($command);
-        $wrappedHandler->postHandle();
+        $wrappedHandler->postHandle($this->nestingLevel);
 
         --$this->nestingLevel;
 
         return $result;
     }
 
-    protected function wrapHandler(CommandHandlerInterface $handler): HandlerWrapperInterface
+    protected function wrapHandler(HandlerInterface $handler): HandlerWrapperInterface
     {
         return $this->wrapperProcessor->wrap($handler);
     }
 
-    abstract protected function getHandler(mixed $command): CommandHandlerInterface;
+    abstract protected function getHandler(mixed $command): HandlerInterface;
 }
