@@ -19,10 +19,6 @@ class AbstractCommandBusTest extends TestCase
         $handlerWrapper->expects($this->once())
             ->method('handle')
             ->willReturn(1);
-        $handlerWrapper->expects($this->once())
-            ->method('preHandle');
-        $handlerWrapper->expects($this->once())
-            ->method('postHandle');
 
         $wrapperProcessor = $this->createMock(WrapperProcessorInterface::class);
         $wrapperProcessor->expects($this->once())

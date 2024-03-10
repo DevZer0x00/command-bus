@@ -14,8 +14,8 @@ use DevZer0x00\CommandBus\Wrapper\WrapperProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Tests\unit\Stubs\WrappedLockTransactionHandlerStub;
-use Tests\unit\Stubs\WrappedTransactionAttributeHandlerStub;
+use Tests\Unit\Stubs\WrappedLockTransactionHandlerStub;
+use Tests\Unit\Stubs\WrappedTransactionAttributeHandlerStub;
 
 class WrapperProcessorTest extends TestCase
 {

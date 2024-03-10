@@ -21,11 +21,7 @@ abstract class AbstractBus implements BusInterface
         ++$this->nestingLevel;
 
         $handler = $this->getHandler($command);
-        $wrappedHandler = $this->wrapHandler($handler);
-
-        $wrappedHandler->preHandle($this->nestingLevel);
-        $result = $wrappedHandler->handle($command);
-        $wrappedHandler->postHandle($this->nestingLevel);
+        $result = $this->wrapHandler($handler)->handle($command);
 
         --$this->nestingLevel;
 

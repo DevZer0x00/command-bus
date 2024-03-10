@@ -22,7 +22,8 @@
     "require": {
         "php": "^8.2",
         "symfony/dependency-injection": "^6.4|^7.0",
-        "symfony/http-kernel": "^6.4|^7.0"
+        "symfony/http-kernel": "^6.4|^7.0",
+        "symfony/lock": "^6.4|^7.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
