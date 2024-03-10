@@ -8,6 +8,7 @@ use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockKeyBuilderInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\SharedLockInterface;
 
@@ -34,11 +35,7 @@ class LockHandlerWrapperTest extends TestCase
             handler: $handler
         );
 
-        $result = $lockWrapper->handle(
-            new class {
-
-            }
-        );
+        $result = $lockWrapper->handle(new stdClass());
 
         $this->assertEquals(1, $result);
     }
