@@ -9,9 +9,15 @@ use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use ReflectionAttribute;
+use Symfony\Component\Lock\LockFactory;
 
-class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterface
+readonly class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterface
 {
+    public function __construct(
+        private LockFactory $lockFactory,
+    ) {
+    }
+
     public function factory(
         ReflectionAttribute $attribute,
         HandlerWrapperInterface $wrappedHandler,
@@ -20,11 +26,16 @@ class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterface
         /** @var LockWrapper $lockAttribute */
         $lockAttribute = $attribute->newInstance();
 
-        $lockKey = $this->getLockKey($lockAttribute, $originalHandler);
+        return new LockHandlerWrapper(
+            lockFactory: $this->lockFactory,
+            keyBuilder: new LockKeyBuilder($lockAttribute, $originalHandler::class),
+            ttl: $lockAttribute->ttl,
+            handler: $wrappedHandler
+        );
     }
 
-    public function getLockKey(LockWrapper $lockWrapper, HandlerInterface $originalHandler): string
+    public static function getDefaultAttributeName(): string
     {
-        
+        return LockWrapper::class;
     }
 }

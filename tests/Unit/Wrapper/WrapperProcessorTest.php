@@ -11,25 +11,15 @@ use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\NopHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessor;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Tests\Unit\Stubs\WrappedLockTransactionHandlerStub;
 use Tests\Unit\Stubs\WrappedTransactionAttributeHandlerStub;
 
 class WrapperProcessorTest extends TestCase
 {
-    private ContainerInterface|MockObject $container;
-
-    protected function setUp(): void
-    {
-        $this->container = $this->createMock(ContainerInterface::class);
-    }
-
     public function testWithoutWrap()
     {
         $wrapperProcessor = new WrapperProcessor(
-            container: $this->container,
             wrapperFactoriesMap: []
         );
 
@@ -54,23 +44,10 @@ class WrapperProcessorTest extends TestCase
             ->method('factory')
             ->willReturn($lockWrapper);
 
-        $this->container
-            ->expects($this->once())
-            ->method('get')
-            ->willReturnCallback(function ($arg) use ($lockWrapperFactory, $transactionWrapperFactory) {
-                $factories = [
-                    'l' => $lockWrapperFactory,
-                    't' => $transactionWrapperFactory,
-                ];
-
-                return $factories[$arg];
-            });
-
         $wrapperProcessor = new WrapperProcessor(
-            container: $this->container,
             wrapperFactoriesMap: [
-                TransactionalWrapper::class => 't',
-                LockWrapper::class => 'l',
+                LockWrapper::class => $lockWrapperFactory,
+                TransactionalWrapper::class => $transactionWrapperFactory,
             ]
         );
 
@@ -95,23 +72,10 @@ class WrapperProcessorTest extends TestCase
             ->method('factory')
             ->willReturn($lockWrapper);
 
-        $this->container
-            ->expects($this->atLeast(2))
-            ->method('get')
-            ->willReturnCallback(function ($arg) use ($lockWrapperFactory, $transactionWrapperFactory) {
-                $factories = [
-                    'l' => $lockWrapperFactory,
-                    't' => $transactionWrapperFactory,
-                ];
-
-                return $factories[$arg];
-            });
-
         $wrapperProcessor = new WrapperProcessor(
-            container: $this->container,
             wrapperFactoriesMap: [
-                TransactionalWrapper::class => 't',
-                LockWrapper::class => 'l',
+                TransactionalWrapper::class => $transactionWrapperFactory,
+                LockWrapper::class => $lockWrapperFactory,
             ]
         );
 

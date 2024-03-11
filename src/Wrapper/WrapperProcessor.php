@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\Wrapper;
 
 use DevZer0x00\CommandBus\HandlerInterface;
-use Psr\Container\ContainerInterface;
 use ReflectionAttribute;
 use ReflectionClass;
 
 use function array_combine;
 use function array_map;
+use function iterator_to_array;
 
 readonly class WrapperProcessor implements WrapperProcessorInterface
 {
+    private array $wrapperFactoriesMap;
+
     public function __construct(
-        private ContainerInterface $container,
-        private array $wrapperFactoriesMap,
+        iterable $wrapperFactoriesMap,
     ) {
+        $this->wrapperFactoriesMap = iterator_to_array($wrapperFactoriesMap);
     }
 
     public function wrap(HandlerInterface $handler): HandlerWrapperInterface
@@ -35,13 +37,11 @@ readonly class WrapperProcessor implements WrapperProcessorInterface
             $attributes
         );
 
-        foreach ($this->wrapperFactoriesMap as $attributeClass => $factoryClass) {
+        foreach ($this->wrapperFactoriesMap as $attributeClass => $factory) {
             if (!isset($attributes[$attributeClass])) {
                 continue;
             }
 
-            /** @var HandlerWrapperFactoryInterface $factory */
-            $factory = $this->container->get($factoryClass);
             $handler = $factory->factory(
                 attribute: $attributes[$attributeClass],
                 wrappedHandler: $handler,

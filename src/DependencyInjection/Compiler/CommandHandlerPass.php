@@ -41,11 +41,9 @@ class CommandHandlerPass implements CompilerPassInterface
         $id = EventDispatcherInterface::class;
         $refMaps[$id] = new Reference($id);
 
-        $container
-            ->register(BusInterface::class, ContainerBus::class)
-            ->setAutowired(false)
-            ->setPublic(true)
-            ->setArguments([ServiceLocatorTagPass::register($container, $refMaps), $handlerMap]);
+        $busDefinition = $container->getDefinition(BusInterface::class);
+        $busDefinition->setArgument('$container', ServiceLocatorTagPass::register($container, $refMaps));
+        $busDefinition->setArgument('$handlerMap', $handlerMap);
     }
 
     private function getCommandType(ReflectionClass $reflClass): string

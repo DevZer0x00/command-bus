@@ -14,4 +14,6 @@ interface HandlerWrapperFactoryInterface
         HandlerWrapperInterface $wrappedHandler,
         HandlerInterface $originalHandler
     ): HandlerWrapperInterface;
+
+    public static function getDefaultAttributeName(): string;
 }

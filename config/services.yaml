@@ -1,3 +1,11 @@
 services:
   DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface:
     class: DevZer0x00\CommandBus\Wrapper\WrapperProcessor
+    arguments:
+      $wrapperFactoriesMap: !tagged_iterator { tag: app.command_handler.wrapper_factory, index_by: attribute }
+
+  DevZer0x00\CommandBus\BusInterface:
+    public: true
+    class: DevZer0x00\CommandBus\ContainerBus
+    arguments:
+      $wrapperProcessor: '@DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface'

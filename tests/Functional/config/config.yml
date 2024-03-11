@@ -1,3 +1,18 @@
 framework:
   secret: "Three can keep a secret, if two of them are dead."
   test: ~
+
+services:
+  DevZer0x00\CommandBus\Wrapper\Lock\LockHandlerWrapperFactory:
+    arguments:
+      $lockFactory: '@lock.default.factory'
+    tags:
+      - { name: app.command_handler.wrapper_factory, priority: -100 }
+
+  Tests\Functional\Stubs\Wrapper\TestHandlerWrapperFactory:
+    tags:
+      - { name: app.command_handler.wrapper_factory, priority: 0 }
+
+  Tests\Functional\Stubs\Command\Handler\TestHandler:
+    tags:
+      - { name: app.command_handler }
