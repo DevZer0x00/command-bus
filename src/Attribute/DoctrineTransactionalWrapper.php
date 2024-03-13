@@ -7,6 +7,9 @@ namespace DevZer0x00\CommandBus\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class TransactionalWrapper
+class DoctrineTransactionalWrapper
 {
+    public function __construct(public string $connection = 'default')
+    {
+    }
 }

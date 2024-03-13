@@ -7,8 +7,21 @@ Command bus for symfony projects
 composer require 
 ````
 
-## Работа с враперами
+## Работа с обертками
 
-На данный момент пакет включает в себя два вида врапперов:
+Обертки должны имплементить **DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface**
+
+На данный момент пакет включает в себя два вида оберток:
 1. LockHandlerWrapper
 2. TransactionHandlerWrapper
+
+Для того чтобы использовать обертки, их необходимо прописать в **config/services.yaml**
+
+```yaml
+services:
+  DevZer0x00\CommandBus\Wrapper\Lock\LockHandlerWrapperFactory:
+    arguments:
+      $lockFactory: '@lock.default.factory'
+    tags:
+      - { name: app.command_handler.wrapper_factory, priority: -100 }
+```

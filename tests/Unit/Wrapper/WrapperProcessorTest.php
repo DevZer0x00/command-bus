@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
-use DevZer0x00\CommandBus\Attribute\TransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
 use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
@@ -47,7 +47,7 @@ class WrapperProcessorTest extends TestCase
         $wrapperProcessor = new WrapperProcessor(
             wrapperFactoriesMap: [
                 LockWrapper::class => $lockWrapperFactory,
-                TransactionalWrapper::class => $transactionWrapperFactory,
+                DoctrineTransactionalWrapper::class => $transactionWrapperFactory,
             ]
         );
 
@@ -74,7 +74,7 @@ class WrapperProcessorTest extends TestCase
 
         $wrapperProcessor = new WrapperProcessor(
             wrapperFactoriesMap: [
-                TransactionalWrapper::class => $transactionWrapperFactory,
+                DoctrineTransactionalWrapper::class => $transactionWrapperFactory,
                 LockWrapper::class => $lockWrapperFactory,
             ]
         );
