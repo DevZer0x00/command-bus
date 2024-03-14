@@ -13,7 +13,7 @@ composer require
 
 На данный момент пакет включает в себя два вида оберток:
 1. LockHandlerWrapper
-2. TransactionHandlerWrapper
+2. DoctrineTransactionHandlerWrapper
 
 Для того чтобы использовать обертки, их необходимо прописать в **config/services.yaml**
 

@@ -18,7 +18,7 @@ use ReflectionAttribute;
 
 class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
 {
-    private DoctrineTransactionHandlerWrapperFactory|MockObject $factory;
+    private DoctrineTransactionHandlerWrapperFactory $factory;
     private ConnectionRegistry|MockObject $registry;
     private DoctrineTransactionStateCheckerInterface|MockObject $transactionStateChecker;
 
