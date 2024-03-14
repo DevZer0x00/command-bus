@@ -12,10 +12,11 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
 
-class DoctrineTransactionHandlerWrapperFactory implements HandlerWrapperFactoryInterface
+readonly class DoctrineTransactionHandlerWrapperFactory implements HandlerWrapperFactoryInterface
 {
     public function __construct(
-        private readonly ConnectionRegistry $connectionRegistry
+        private ConnectionRegistry $connectionRegistry,
+        private DoctrineTransactionStateCheckerInterface $transactionStateChecker,
     ) {
     }
 
@@ -31,6 +32,12 @@ class DoctrineTransactionHandlerWrapperFactory implements HandlerWrapperFactoryI
 
         /** @var Connection $connection */
         $connection = $this->connectionRegistry->getConnection($connectionName);
+
+        return new DoctrineTransactionHandlerWrapper(
+            handler: $wrappedHandler,
+            connection: $connection,
+            transactionStateChecker: $this->transactionStateChecker
+        );
     }
 
     public static function getDefaultAttributeName(): string
