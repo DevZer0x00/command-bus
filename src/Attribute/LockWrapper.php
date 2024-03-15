@@ -9,6 +9,9 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 class LockWrapper
 {
+    /**
+     * @param array<string> $commandFields
+     */
     public function __construct(
         public array $commandFields = [],
         public ?string $lockKey = null,

@@ -7,7 +7,6 @@ namespace DevZer0x00\CommandBus\Wrapper\Lock;
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
 use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use ReflectionAttribute;
 use Symfony\Component\Lock\LockFactory;
 
@@ -20,9 +19,9 @@ readonly class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterfa
 
     public function factory(
         ReflectionAttribute $attribute,
-        HandlerWrapperInterface $wrappedHandler,
+        HandlerInterface $wrappedHandler,
         HandlerInterface $originalHandler
-    ): HandlerWrapperInterface {
+    ): HandlerInterface {
         /** @var LockWrapper $lockAttribute */
         $lockAttribute = $attribute->newInstance();
 

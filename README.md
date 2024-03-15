@@ -25,3 +25,14 @@ services:
     tags:
       - { name: app.command_handler.wrapper_factory, priority: -100 }
 ```
+
+## PHPStan
+
+Для того чтобы в хэндлерах анализатор кода не ругался на "Access to an undefined property" добавьте в ваш файл
+конфигурации анализатора следующий код:
+
+```yaml
+parameters:
+  universalObjectCratesClasses:
+    - DevZer0x00\CommandBus\CommandInterface
+```

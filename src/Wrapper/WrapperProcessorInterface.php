@@ -8,5 +8,5 @@ use DevZer0x00\CommandBus\HandlerInterface;
 
 interface WrapperProcessorInterface
 {
-    public function wrap(HandlerInterface $handler): HandlerWrapperInterface;
+    public function wrap(HandlerInterface $handler): HandlerInterface;
 }

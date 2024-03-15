@@ -12,6 +12,9 @@ use function sprintf;
 
 class ContainerBus extends AbstractBus
 {
+    /**
+     * @param array<class-string, string> $handlerMap
+     */
     public function __construct(
         private readonly ContainerInterface $container,
         WrapperProcessorInterface $wrapperProcessor,
@@ -20,14 +23,15 @@ class ContainerBus extends AbstractBus
         parent::__construct(wrapperProcessor: $wrapperProcessor);
     }
 
-    protected function getHandler(mixed $command): HandlerInterface
+    protected function getHandler(CommandInterface $command): HandlerInterface
     {
+        /** @phpstan-ignore-next-line */
         return $this->container->get(
             $this->getHandlerId($command)
         );
     }
 
-    private function getHandlerId(mixed $command): string
+    private function getHandlerId(CommandInterface $command): string
     {
         if (isset($this->handlerMap[$command::class])) {
             return $this->handlerMap[$command::class];

@@ -14,21 +14,26 @@ use function iterator_to_array;
 
 readonly class WrapperProcessor implements WrapperProcessorInterface
 {
+    /**
+     * @var array<class-string, HandlerWrapperFactoryInterface>
+     */
     private array $wrapperFactoriesMap;
 
+    /**
+     * @param iterable<class-string, HandlerWrapperFactoryInterface> $wrapperFactoriesMap
+     */
     public function __construct(
         iterable $wrapperFactoriesMap,
     ) {
         $this->wrapperFactoriesMap = iterator_to_array($wrapperFactoriesMap);
     }
 
-    public function wrap(HandlerInterface $handler): HandlerWrapperInterface
+    public function wrap(HandlerInterface $handler): HandlerInterface
     {
-        $originalHandler = $handler;
-        $handler = new NopHandlerWrapper($handler);
+        $handler = $originalHandler = $handler;
 
-        $reflClass = new ReflectionClass($originalHandler);
-        $attributes = $reflClass->getAttributes();
+        $reflectionClass = new ReflectionClass($originalHandler);
+        $attributes = $reflectionClass->getAttributes();
         $attributes = array_combine(
             array_map(
                 fn(ReflectionAttribute $attribute) => $attribute->getName(),

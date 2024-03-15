@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper\Lock;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
+use DevZer0x00\CommandBus\CommandInterface;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockKeyBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,12 @@ class LockKeyBuilderTest extends TestCase
     {
         $attribute = new LockWrapper(commandFields: ['i', 'k']);
 
-        $commandObj = new stdClass();
+        $commandObj = new class implements CommandInterface {
+            public string $i;
+            public string $j;
+            public string $k;
+        };
+
         $commandObj->i = 'test';
         $commandObj->j = 'test1';
         $commandObj->k = 'test2';
@@ -36,7 +42,12 @@ class LockKeyBuilderTest extends TestCase
     {
         $attribute = new LockWrapper(commandFields: ['i', 'k'], lockKey: 'test');
 
-        $commandObj = new stdClass();
+        $commandObj = new class implements CommandInterface {
+            public string $i;
+            public string $j;
+            public string $k;
+        };
+
         $commandObj->i = 'test';
         $commandObj->j = 'test1';
         $commandObj->k = 'test2';
@@ -46,7 +57,7 @@ class LockKeyBuilderTest extends TestCase
         $this->assertEquals('test', $keyBuilder->build($commandObj));
     }
 
-    private function buildKeyFromStrings(object $class, array $strings): string
+    private function buildKeyFromStrings(CommandInterface $class, array $strings): string
     {
         return md5($class::class . json_encode($strings));
     }

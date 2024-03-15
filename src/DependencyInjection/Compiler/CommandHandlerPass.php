@@ -31,10 +31,10 @@ class CommandHandlerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $tags) {
             $definition = $container->getDefinition($id);
             $class = $container->getParameterBag()->resolveValue($definition->getClass());
+            /** @phpstan-ignore-next-line */
             $commandClass = $this->getCommandType($container->getReflectionClass($class));
 
             $handlerMap[$commandClass] = $id;
-
             $refMaps[$id] = new TypedReference($id, $class);
         }
 
@@ -46,17 +46,17 @@ class CommandHandlerPass implements CompilerPassInterface
         $busDefinition->setArgument('$handlerMap', $handlerMap);
     }
 
-    private function getCommandType(ReflectionClass $reflClass): string
+    private function getCommandType(ReflectionClass $reflectionClass): string
     {
-        if (!$reflClass->hasMethod('handle')) {
+        if (!$reflectionClass->hasMethod('handle')) {
             throw new InvalidArgumentException(
-                sprintf('Command Handler %s does not have method handle', $reflClass->getName())
+                sprintf('Command Handler %s does not have method handle', $reflectionClass->getName())
             );
         }
 
-        $method = $reflClass->getMethod('handle');
+        $method = $reflectionClass->getMethod('handle');
 
-        /** @var ReflectionParameter $parameter */
+        /** @var ReflectionParameter|null $parameter */
         $parameter = $method->getParameters()[0] ?? null;
 
         if ($parameter === null) {

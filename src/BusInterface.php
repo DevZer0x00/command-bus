@@ -6,5 +6,5 @@ namespace DevZer0x00\CommandBus;
 
 interface BusInterface
 {
-    public function handle(object $command): mixed;
+    public function handle(CommandInterface $command): mixed;
 }

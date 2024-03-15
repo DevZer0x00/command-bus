@@ -4,33 +4,31 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper\Lock;
 
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
+use DevZer0x00\CommandBus\CommandInterface;
+use DevZer0x00\CommandBus\HandlerInterface;
 use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\LockInterface;
 
-readonly class LockHandlerWrapper implements HandlerWrapperInterface
+readonly class LockHandlerWrapper implements HandlerInterface
 {
-    private LockInterface $lock;
-
     public function __construct(
         private LockFactory $lockFactory,
         private LockKeyBuilderInterface $keyBuilder,
         private int $ttl,
-        private HandlerWrapperInterface $handler,
+        private HandlerInterface $handler,
     ) {
     }
 
-    public function handle($commandObject): mixed
+    public function handle(CommandInterface $command): mixed
     {
-        $this->lock = $this->lockFactory->createLock(
-            $this->keyBuilder->build($commandObject),
+        $lock = $this->lockFactory->createLock(
+            $this->keyBuilder->build($command),
             $this->ttl
         );
-        $this->lock->acquire(true);
+        $lock->acquire(true);
 
-        $result = $this->handler->handle($commandObject);
+        $result = $this->handler->handle($command);
 
-        $this->lock->release();
+        $lock->release();
 
         return $result;
     }

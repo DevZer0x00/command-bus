@@ -6,7 +6,6 @@ namespace Tests\Unit\Wrapper\Transaction;
 
 use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
 use DevZer0x00\CommandBus\HandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapperFactory;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
@@ -48,7 +47,7 @@ class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
 
         $handler = $this->factory->factory(
             attribute: $refl,
-            wrappedHandler: $this->createMock(HandlerWrapperInterface::class),
+            wrappedHandler: $this->createMock(HandlerInterface::class),
             originalHandler: $this->createMock(HandlerInterface::class)
         );
 

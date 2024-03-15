@@ -7,7 +7,6 @@ namespace DevZer0x00\CommandBus\Wrapper\Transaction;
 use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
 use DevZer0x00\CommandBus\HandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperInterface;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
@@ -22,9 +21,9 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements HandlerWrappe
 
     public function factory(
         ReflectionAttribute $attribute,
-        HandlerWrapperInterface $wrappedHandler,
+        HandlerInterface $wrappedHandler,
         HandlerInterface $originalHandler
-    ): HandlerWrapperInterface {
+    ): HandlerInterface {
         /** @var DoctrineTransactionalWrapper $transactionAttribute */
         $transactionAttribute = $attribute->newInstance();
 

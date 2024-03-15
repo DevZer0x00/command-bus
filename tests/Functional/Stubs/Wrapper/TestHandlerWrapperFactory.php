@@ -13,7 +13,7 @@ class TestHandlerWrapperFactory implements HandlerWrapperFactoryInterface
 {
     public function factory(
         ReflectionAttribute $attribute,
-        HandlerWrapperInterface $wrappedHandler,
+        HandlerInterface $wrappedHandler,
         HandlerInterface $originalHandler
     ): HandlerWrapperInterface {
         // TODO: Implement factory() method.
