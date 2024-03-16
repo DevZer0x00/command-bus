@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\DependencyInjection\Compiler;
 
 use DevZer0x00\CommandBus\BusInterface;
-use DevZer0x00\CommandBus\ContainerBus;
+use DevZer0x00\CommandBus\CommandInterface;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,6 +18,10 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\TypedReference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use function array_filter;
+use function array_map;
+use function sprintf;
 
 class CommandHandlerPass implements CompilerPassInterface
 {
@@ -30,12 +37,19 @@ class CommandHandlerPass implements CompilerPassInterface
 
         foreach ($taggedServices as $id => $tags) {
             $definition = $container->getDefinition($id);
+            /** @var string $class */
             $class = $container->getParameterBag()->resolveValue($definition->getClass());
             /** @phpstan-ignore-next-line */
-            $commandClass = $this->getCommandType($container->getReflectionClass($class));
+            $commandClasses = $this->getCommandType($container->getReflectionClass($class));
 
-            $handlerMap[$commandClass] = $id;
-            $refMaps[$id] = new TypedReference($id, $class);
+            if (empty($commandClasses)) {
+                throw new RuntimeException(sprintf('Not found command for handler %s', $class));
+            }
+
+            foreach ($commandClasses as $commandClass) {
+                $handlerMap[$commandClass] = $id;
+                $refMaps[$id] = new TypedReference($id, $class);
+            }
         }
 
         $id = EventDispatcherInterface::class;
@@ -46,7 +60,10 @@ class CommandHandlerPass implements CompilerPassInterface
         $busDefinition->setArgument('$handlerMap', $handlerMap);
     }
 
-    private function getCommandType(ReflectionClass $reflectionClass): string
+    /**
+     * @return array<string>
+     */
+    private function getCommandType(ReflectionClass $reflectionClass): array
     {
         if (!$reflectionClass->hasMethod('handle')) {
             throw new InvalidArgumentException(
@@ -69,6 +86,14 @@ class CommandHandlerPass implements CompilerPassInterface
             throw new InvalidArgumentException();
         }
 
-        return $type->getName();
+        $types = $type instanceof ReflectionUnionType ? $type->getTypes() : [$type];
+        $types = array_map(
+            fn(ReflectionNamedType $type): string => $type->getName(),
+            $types
+        );
+
+        $types = array_filter($types, fn(string $className) => $className !== CommandInterface::class);
+
+        return $types;
     }
 }
