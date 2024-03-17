@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+  <config name="installed_paths" value="vendor/slevomat/coding-standard"/>
+  <arg name="basepath" value="."/>
+  <arg name="cache" value=".phpcs-cache"/>
+  <arg name="colors"/>
+  <arg name="extensions" value="php"/>
+
+  <file>src/</file>
+  <file>tests/</file>
+
+  <exclude-pattern>vendor</exclude-pattern>
+
+  <rule ref="PSR1">
+    <exclude name="PSR1.Files.SideEffects.FoundWithSymbols" />
+  </rule>
+  <rule ref="PSR12">
+    <exclude name="PSR12.Files.FileHeader.IncorrectOrder" />
+    <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter" />
+    <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore" />
+  </rule>
+  <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
+  <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+  <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+    <properties>
+      <property name="searchAnnotations" value="true"/>
+    </properties>
+  </rule>
+
+  <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
+
+  <!-- Include some sniffs from other standards that don't conflict with PEAR -->
+  <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+  <!--    <rule ref="Squiz.Arrays.ArrayDeclaration"/>-->
+  <rule ref="Squiz.ControlStructures.ControlSignature"/>
+  <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+
+  <rule ref="Squiz.Scope.MethodScope"/>
+  <rule ref="Squiz.WhiteSpace.ControlStructureSpacing"/>
+
+  <rule ref="Squiz.Strings.ConcatenationSpacing">
+    <properties>
+      <property name="spacing" value="1"/>
+    </properties>
+  </rule>
+
+  <rule ref="Generic.ControlStructures.DisallowYodaConditions"/>
+  <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+  <rule ref="Generic.NamingConventions.ConstructorName"/>
+  <rule ref="Generic.PHP.DeprecatedFunctions"/>
+  <rule ref="Generic.PHP.LowerCaseKeyword"/>
+  <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+  <rule ref="Generic.ControlStructures.InlineControlStructure">
+    <properties>
+      <property name="error" value="true"/>
+    </properties>
+  </rule>
+
+  <rule ref="Squiz.Arrays.ArrayDeclaration.KeyNotAligned">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNotAligned">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine">
+    <severity>0</severity>
+  </rule>
+  <!--    Check var names, but we don't want leading underscores for private vars-->
+  <rule ref="Squiz.NamingConventions.ValidVariableName"/>
+  <rule ref="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore">
+    <severity>0</severity>
+  </rule>
+
+  <!--    We use custom indent rules for arrays-->
+  <rule ref="Generic.Arrays.ArrayIndent"/>
+
+  <!--    Ban some functions-->
+  <rule ref="Generic.PHP.ForbiddenFunctions">
+    <properties>
+      <property name="forbiddenFunctions" type="array">
+        <element key="sizeof" value="count"/>
+        <element key="delete" value="unset"/>
+        <element key="print" value="echo"/>
+        <element key="is_null" value="null"/>
+        <element key="create_function" value="null"/>
+        <element key="die" value="null"/>
+        <element key="exit" value="null"/>
+        <element key="dd" value="null"/>
+      </property>
+    </properties>
+  </rule>
+
+  <!--  Private methods MUST not be prefixed with an underscore-->
+  <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+    <type>error</type>
+  </rule>
+
+  <!--  Private properties MUST not be prefixed with an underscore-->
+  <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+    <type>error</type>
+  </rule>
+
+  <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+    <exclude-pattern>*/tests/*</exclude-pattern>
+  </rule>
+
+  <!-- specific sniffs to include -->
+  <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+    <properties>
+      <property name="spacesCountAroundEqualsSign" value="0" />
+    </properties>
+  </rule>
+
+  <rule ref="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat">
+    <properties>
+      <property name="withSpaces" value="no" />
+    </properties>
+  </rule>
+
+  <rule ref="Generic.Files.LineLength">
+    <properties>
+      <property name="lineLimit" value="180"/>
+    </properties>
+  </rule>
+
+</ruleset>

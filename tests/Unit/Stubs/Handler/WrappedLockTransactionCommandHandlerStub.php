@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Stubs\Handler;
+
+use DevZer0x00\CommandBus\Attribute\DoctrineORMTransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\LockWrapper;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+
+#[LockWrapper]
+#[DoctrineORMTransactionalWrapper]
+class WrappedLockTransactionCommandHandlerStub implements CommandHandlerInterface
+{
+    public function handle(object $command): mixed
+    {
+        return null;
+    }
+}
