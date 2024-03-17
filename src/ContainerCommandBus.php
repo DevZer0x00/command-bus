@@ -8,6 +8,8 @@ use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
 use function sprintf;
 
 class ContainerCommandBus extends AbstractCommandBus
@@ -18,9 +20,13 @@ class ContainerCommandBus extends AbstractCommandBus
     public function __construct(
         private readonly ContainerInterface $container,
         WrapperProcessorInterface $wrapperProcessor,
+        EventDispatcherInterface $eventDispatcher,
         private readonly array $handlerMap,
     ) {
-        parent::__construct(wrapperProcessor: $wrapperProcessor);
+        parent::__construct(
+            wrapperProcessor: $wrapperProcessor,
+            eventDispatcher: $eventDispatcher
+        );
     }
 
     protected function getHandler(object $command): CommandHandlerInterface

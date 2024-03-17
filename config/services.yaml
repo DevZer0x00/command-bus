@@ -9,3 +9,4 @@ services:
     class: DevZer0x00\CommandBus\ContainerCommandBus
     arguments:
       $wrapperProcessor: '@DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface'
+      $eventDispatcher: '@event_dispatcher'
