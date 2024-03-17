@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus;
 
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 
 abstract class AbstractCommandBus implements CommandBusInterface
@@ -27,7 +28,7 @@ abstract class AbstractCommandBus implements CommandBusInterface
         return $result;
     }
 
-    protected function wrapHandler(CommandHandlerInterface $handler): CommandHandlerInterface
+    protected function wrapHandler(CommandHandlerInterface $handler): CommandHandlerWrapperInterface
     {
         return $this->wrapperProcessor->wrap($handler);
     }

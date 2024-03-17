@@ -4,8 +4,8 @@ services:
     arguments:
       $wrapperFactoriesMap: !tagged_iterator { tag: app.command_handler.wrapper_factory, index_by: attribute }
 
-  DevZer0x00\CommandBus\BusInterface:
+  DevZer0x00\CommandBus\CommandBusInterface:
     public: true
-    class: DevZer0x00\CommandBus\ContainerBus
+    class: DevZer0x00\CommandBus\ContainerCommandBus
     arguments:
       $wrapperProcessor: '@DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface'

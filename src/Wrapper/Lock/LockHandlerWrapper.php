@@ -7,7 +7,7 @@ namespace DevZer0x00\CommandBus\Wrapper\Lock;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use Symfony\Component\Lock\LockFactory;
 
-readonly class LockCommandHandlerWrapper implements CommandHandlerWrapperInterface
+readonly class LockHandlerWrapper implements CommandHandlerWrapperInterface
 {
     public function __construct(
         private LockFactory $lockFactory,

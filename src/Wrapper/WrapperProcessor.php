@@ -28,7 +28,7 @@ readonly class WrapperProcessor implements WrapperProcessorInterface
         $this->wrapperFactoriesMap = iterator_to_array($wrapperFactoriesMap);
     }
 
-    public function wrap(CommandHandlerInterface $handler): CommandHandlerInterface
+    public function wrap(CommandHandlerInterface $handler): CommandHandlerWrapperInterface
     {
         $originalHandler = $handler;
         $handler = new NopCommandHandlerWrapper($handler);

@@ -6,15 +6,16 @@ namespace Tests\Functional\Stubs\Wrapper;
 
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperFactoryInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use ReflectionAttribute;
 
 class TestCommandHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function factory(
         ReflectionAttribute $attribute,
-        CommandHandlerInterface $wrappedHandler,
+        CommandHandlerWrapperInterface $wrappedHandler,
         CommandHandlerInterface $originalHandler
-    ): CommandHandlerInterface {
+    ): CommandHandlerWrapperInterface {
         // TODO: Implement factory() method.
     }
 

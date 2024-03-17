@@ -6,6 +6,7 @@ namespace Tests\Unit\Wrapper;
 
 use DevZer0x00\CommandBus\AbstractCommandBus;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +16,10 @@ class AbstractCommandBusTest extends TestCase
 {
     public function testWrapped()
     {
-        $handlerWrapper = $this->createMock(CommandHandlerInterface::class);
+        $handlerWrapper = $this->createMock(CommandHandlerWrapperInterface::class);
+        $handlerWrapper->expects($this->once())
+            ->method('handle')
+            ->willReturn(1);
 
         $wrapperProcessor = $this->createMock(WrapperProcessorInterface::class);
         $wrapperProcessor->expects($this->once())

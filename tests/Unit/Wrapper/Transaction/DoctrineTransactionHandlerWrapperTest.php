@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper\Transaction;
 
 use DevZer0x00\CommandBus\CommandHandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionCommandHandlerWrapper;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
+use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
 use Doctrine\DBAL\Driver\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,7 +16,7 @@ use stdClass;
 
 class DoctrineTransactionHandlerWrapperTest extends TestCase
 {
-    private DoctrineTransactionCommandHandlerWrapper $handlerWrapper;
+    private DoctrineTransactionHandlerWrapper $handlerWrapper;
     private CommandHandlerInterface|MockObject $handler;
     private Connection|MockObject $connection;
     private DoctrineTransactionStateCheckerInterface|MockObject $transactionStateChecker;
@@ -25,9 +26,9 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
         $this->connection = $this->createMock(Connection::class);
         $this->transactionStateChecker = $this->createMock(DoctrineTransactionStateCheckerInterface::class);
 
-        $this->handler = $this->createMock(CommandHandlerInterface::class);
+        $this->handler = $this->createMock(CommandHandlerWrapperInterface::class);
 
-        $this->handlerWrapper = new DoctrineTransactionCommandHandlerWrapper(
+        $this->handlerWrapper = new DoctrineTransactionHandlerWrapper(
             wrappedHandler: $this->handler,
             connection: $this->connection,
             transactionStateChecker: $this->transactionStateChecker

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Wrapper\Lock;
 
-use DevZer0x00\CommandBus\CommandHandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\Lock\LockCommandHandlerWrapper;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
+use DevZer0x00\CommandBus\Wrapper\Lock\LockHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockKeyBuilderInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -25,10 +25,10 @@ class LockHandlerWrapperTest extends TestCase
         $lockKeyBuilder = $this->createMock(LockKeyBuilderInterface::class);
         $lockKeyBuilder->expects($this->once())->method('build')->willReturn('test');
 
-        $handler = $this->createMock(CommandHandlerInterface::class);
+        $handler = $this->createMock(CommandHandlerWrapperInterface::class);
         $handler->expects($this->once())->method('handle')->willReturn(1);
 
-        $lockWrapper = new LockCommandHandlerWrapper(
+        $lockWrapper = new LockHandlerWrapper(
             lockFactory: $lockFactory,
             keyBuilder: $lockKeyBuilder,
             ttl: 10,

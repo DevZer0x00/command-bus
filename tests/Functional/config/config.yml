@@ -9,7 +9,7 @@ services:
     tags:
       - { name: app.command_handler.wrapper_factory, priority: -100 }
 
-  Tests\Functional\Stubs\Wrapper\TestHandlerWrapperFactory:
+  Tests\Functional\Stubs\Wrapper\TestCommandHandlerWrapperFactory:
     tags:
       - { name: app.command_handler.wrapper_factory, priority: 0 }
 

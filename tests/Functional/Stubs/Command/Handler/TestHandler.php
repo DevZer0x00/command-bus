@@ -7,7 +7,7 @@ namespace Tests\Functional\Stubs\Command\Handler;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use Tests\Functional\Stubs\Command\TestCommand;
 
-class TestCommandHandler implements CommandHandlerInterface
+class TestHandler implements CommandHandlerInterface
 {
     public function handle(TestCommand $command): string
     {

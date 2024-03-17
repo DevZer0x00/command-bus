@@ -11,7 +11,7 @@ use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use ReflectionAttribute;
 use Symfony\Component\Lock\LockFactory;
 
-readonly class LockCommandHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
+readonly class LockHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function __construct(
         private LockFactory $lockFactory,
@@ -26,7 +26,7 @@ readonly class LockCommandHandlerWrapperFactory implements CommandHandlerWrapper
         /** @var LockWrapper $lockAttribute */
         $lockAttribute = $attribute->newInstance();
 
-        return new LockCommandHandlerWrapper(
+        return new LockHandlerWrapper(
             lockFactory: $this->lockFactory,
             keyBuilder: new LockKeyBuilder($lockAttribute, $originalHandler::class),
             ttl: $lockAttribute->ttl,

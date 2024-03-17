@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper\Transaction;
 
-use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use Doctrine\DBAL\Driver\Connection;
 use Throwable;
 
-class DoctrineTransactionCommandHandlerWrapper implements CommandHandlerWrapperInterface
+class DoctrineTransactionHandlerWrapper implements CommandHandlerWrapperInterface
 {
     private bool $starter = false;
 

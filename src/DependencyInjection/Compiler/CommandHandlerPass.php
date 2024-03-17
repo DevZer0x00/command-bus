@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\TypedReference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-use function array_filter;
 use function array_map;
 use function sprintf;
 

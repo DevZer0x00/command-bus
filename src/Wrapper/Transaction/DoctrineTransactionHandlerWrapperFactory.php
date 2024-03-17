@@ -12,7 +12,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
 
-readonly class DoctrineTransactionCommandHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
+readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function __construct(
         private ConnectionRegistry $connectionRegistry,
@@ -33,7 +33,7 @@ readonly class DoctrineTransactionCommandHandlerWrapperFactory implements Comman
         /** @var Connection $connection */
         $connection = $this->connectionRegistry->getConnection($connectionName);
 
-        return new DoctrineTransactionCommandHandlerWrapper(
+        return new DoctrineTransactionHandlerWrapper(
             wrappedHandler: $wrappedHandler,
             connection: $connection,
             transactionStateChecker: $this->transactionStateChecker
