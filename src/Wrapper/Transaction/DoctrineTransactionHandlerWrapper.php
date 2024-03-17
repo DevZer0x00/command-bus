@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\Wrapper\Transaction;
 
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Throwable;
 
 class DoctrineTransactionHandlerWrapper implements CommandHandlerWrapperInterface
@@ -13,15 +13,14 @@ class DoctrineTransactionHandlerWrapper implements CommandHandlerWrapperInterfac
     private bool $starter = false;
 
     public function __construct(
-        private readonly CommandHandlerWrapperInterface $wrappedHandler,
-        private readonly Connection $connection,
-        private readonly DoctrineTransactionStateCheckerInterface $transactionStateChecker,
+        private CommandHandlerWrapperInterface $wrappedHandler,
+        private Connection $connection,
     ) {
     }
 
     public function handle(object $command): mixed
     {
-        if (!$this->transactionStateChecker->inTransaction($this->connection)) {
+        if (!$this->connection->isTransactionActive()) {
             $this->connection->beginTransaction();
             $this->starter = true;
         }

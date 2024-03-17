@@ -8,7 +8,7 @@ use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
 
@@ -16,7 +16,6 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandle
 {
     public function __construct(
         private ConnectionRegistry $connectionRegistry,
-        private DoctrineTransactionStateCheckerInterface $transactionStateChecker,
     ) {
     }
 
@@ -36,7 +35,6 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandle
         return new DoctrineTransactionHandlerWrapper(
             wrappedHandler: $wrappedHandler,
             connection: $connection,
-            transactionStateChecker: $this->transactionStateChecker
         );
     }
 

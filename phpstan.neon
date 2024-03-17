@@ -2,8 +2,6 @@ includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
-  universalObjectCratesClasses:
-    - DevZer0x00\CommandBus\CommandInterface
   level: 9
   checkGenericClassInNonGenericObjectType: false
   paths:

@@ -9,8 +9,7 @@ use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapperFactory;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,16 +19,13 @@ class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
 {
     private DoctrineTransactionHandlerWrapperFactory $factory;
     private ConnectionRegistry|MockObject $registry;
-    private DoctrineTransactionStateCheckerInterface|MockObject $transactionStateChecker;
 
     protected function setUp(): void
     {
         $this->registry = $this->createMock(ConnectionRegistry::class);
-        $this->transactionStateChecker = $this->createMock(DoctrineTransactionStateCheckerInterface::class);
 
         $this->factory = new DoctrineTransactionHandlerWrapperFactory(
             connectionRegistry: $this->registry,
-            transactionStateChecker: $this->transactionStateChecker
         );
     }
 

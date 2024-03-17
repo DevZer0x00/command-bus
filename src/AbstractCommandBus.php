@@ -9,8 +9,6 @@ use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 
 abstract class AbstractCommandBus implements CommandBusInterface
 {
-    protected int $nestingLevel = 0;
-
     public function __construct(
         private readonly WrapperProcessorInterface $wrapperProcessor
     ) {
@@ -18,12 +16,8 @@ abstract class AbstractCommandBus implements CommandBusInterface
 
     public function handle(object $command): mixed
     {
-        ++$this->nestingLevel;
-
         $handler = $this->getHandler($command);
         $result = $this->wrapHandler($handler)->handle($command);
-
-        --$this->nestingLevel;
 
         return $result;
     }

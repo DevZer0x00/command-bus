@@ -7,8 +7,7 @@ namespace Tests\Unit\Wrapper\Transaction;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -19,27 +18,24 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
     private DoctrineTransactionHandlerWrapper $handlerWrapper;
     private CommandHandlerInterface|MockObject $handler;
     private Connection|MockObject $connection;
-    private DoctrineTransactionStateCheckerInterface|MockObject $transactionStateChecker;
 
     protected function setUp(): void
     {
         $this->connection = $this->createMock(Connection::class);
-        $this->transactionStateChecker = $this->createMock(DoctrineTransactionStateCheckerInterface::class);
 
         $this->handler = $this->createMock(CommandHandlerWrapperInterface::class);
 
         $this->handlerWrapper = new DoctrineTransactionHandlerWrapper(
             wrappedHandler: $this->handler,
             connection: $this->connection,
-            transactionStateChecker: $this->transactionStateChecker
         );
     }
 
     public function testTransactionNotStarted()
     {
-        $this->transactionStateChecker
+        $this->connection
             ->expects($this->once())
-            ->method('inTransaction')
+            ->method('isTransactionActive')
             ->willReturn(false);
 
         $this->connection
@@ -59,9 +55,9 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
 
     public function testTransactionIgnoreWhenStarted()
     {
-        $this->transactionStateChecker
+        $this->connection
             ->expects($this->once())
-            ->method('inTransaction')
+            ->method('isTransactionActive')
             ->willReturn(true);
 
         $this->connection
@@ -83,9 +79,9 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $this->transactionStateChecker
+        $this->connection
             ->expects($this->once())
-            ->method('inTransaction')
+            ->method('isTransactionActive')
             ->willReturn(false);
 
         $this->connection
