@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Wrapper\Transaction;
 
-use DevZer0x00\CommandBus\CommandInterface;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionCommandHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
@@ -54,8 +53,7 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
             ->expects($this->once())
             ->method('handle');
 
-        $this->handlerWrapper->handle(new class implements CommandInterface {
-        });
+        $this->handlerWrapper->handle(new stdClass());
     }
 
     public function testTransactionIgnoreWhenStarted()
@@ -77,8 +75,7 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
             ->expects($this->once())
             ->method('handle');
 
-        $this->handlerWrapper->handle(new class implements CommandInterface {
-        });
+        $this->handlerWrapper->handle(new stdClass());
     }
 
     public function testTransactionRollback()

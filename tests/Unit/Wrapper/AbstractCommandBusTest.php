@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper;
 
 use DevZer0x00\CommandBus\AbstractCommandBus;
-use DevZer0x00\CommandBus\CommandInterface;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;

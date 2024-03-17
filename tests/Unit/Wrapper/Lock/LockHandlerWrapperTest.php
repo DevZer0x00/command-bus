@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Wrapper\Lock;
 
-use DevZer0x00\CommandBus\CommandInterface;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockCommandHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockKeyBuilderInterface;

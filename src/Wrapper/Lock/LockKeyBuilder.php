@@ -6,8 +6,6 @@ namespace DevZer0x00\CommandBus\Wrapper\Lock;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
 
-use DevZer0x00\CommandBus\CommandInterface;
-
 use function json_encode;
 use function md5;
 

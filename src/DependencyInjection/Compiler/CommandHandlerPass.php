@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\DependencyInjection\Compiler;
 
 use DevZer0x00\CommandBus\CommandBusInterface;
-use DevZer0x00\CommandBus\CommandInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
