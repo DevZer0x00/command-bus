@@ -6,7 +6,7 @@ namespace DevZer0x00\CommandBus;
 
 use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 
-abstract class AbstractBus implements BusInterface
+abstract class AbstractCommandBus implements CommandBusInterface
 {
     protected int $nestingLevel = 0;
 
@@ -15,7 +15,7 @@ abstract class AbstractBus implements BusInterface
     ) {
     }
 
-    public function handle(CommandInterface $command): mixed
+    public function handle(object $command): mixed
     {
         ++$this->nestingLevel;
 
@@ -27,10 +27,10 @@ abstract class AbstractBus implements BusInterface
         return $result;
     }
 
-    protected function wrapHandler(HandlerInterface $handler): HandlerInterface
+    protected function wrapHandler(CommandHandlerInterface $handler): CommandHandlerInterface
     {
         return $this->wrapperProcessor->wrap($handler);
     }
 
-    abstract protected function getHandler(CommandInterface $command): HandlerInterface;
+    abstract protected function getHandler(object $command): CommandHandlerInterface;
 }

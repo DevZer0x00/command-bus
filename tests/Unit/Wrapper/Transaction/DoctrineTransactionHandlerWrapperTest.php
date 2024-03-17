@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper\Transaction;
 
 use DevZer0x00\CommandBus\CommandInterface;
-use DevZer0x00\CommandBus\HandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionCommandHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionStateCheckerInterface;
 use Doctrine\DBAL\Driver\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use stdClass;
 
 class DoctrineTransactionHandlerWrapperTest extends TestCase
 {
-    private DoctrineTransactionHandlerWrapper $handlerWrapper;
-    private HandlerInterface|MockObject $handler;
+    private DoctrineTransactionCommandHandlerWrapper $handlerWrapper;
+    private CommandHandlerInterface|MockObject $handler;
     private Connection|MockObject $connection;
     private DoctrineTransactionStateCheckerInterface|MockObject $transactionStateChecker;
 
@@ -25,10 +26,10 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
         $this->connection = $this->createMock(Connection::class);
         $this->transactionStateChecker = $this->createMock(DoctrineTransactionStateCheckerInterface::class);
 
-        $this->handler = $this->createMock(HandlerInterface::class);
+        $this->handler = $this->createMock(CommandHandlerInterface::class);
 
-        $this->handlerWrapper = new DoctrineTransactionHandlerWrapper(
-            handler: $this->handler,
+        $this->handlerWrapper = new DoctrineTransactionCommandHandlerWrapper(
+            wrappedHandler: $this->handler,
             connection: $this->connection,
             transactionStateChecker: $this->transactionStateChecker
         );
@@ -106,7 +107,6 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
             ->method('handle')
             ->willThrowException(new RuntimeException());
 
-        $this->handlerWrapper->handle(new class implements CommandInterface {
-        });
+        $this->handlerWrapper->handle(new stdClass());
     }
 }

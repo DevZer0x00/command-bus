@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Functional;
 
-use DevZer0x00\CommandBus\BusInterface;
-use DevZer0x00\CommandBus\ContainerBus;
+use DevZer0x00\CommandBus\CommandBusInterface;
+use DevZer0x00\CommandBus\ContainerCommandBus;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,8 +22,8 @@ class ContainerCommandBusTest extends KernelTestCase
 
     public function testCommandBus()
     {
-        $commandBus = $this->container->get(BusInterface::class);
+        $commandBus = $this->container->get(CommandBusInterface::class);
 
-        $this->assertInstanceOf(ContainerBus::class, $commandBus);
+        $this->assertInstanceOf(ContainerCommandBus::class, $commandBus);
     }
 }

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\Wrapper\Lock;
 
 use DevZer0x00\CommandBus\CommandInterface;
-use DevZer0x00\CommandBus\HandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\Lock\LockHandlerWrapper;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\Lock\LockCommandHandlerWrapper;
 use DevZer0x00\CommandBus\Wrapper\Lock\LockKeyBuilderInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\SharedLockInterface;
 
@@ -25,18 +26,17 @@ class LockHandlerWrapperTest extends TestCase
         $lockKeyBuilder = $this->createMock(LockKeyBuilderInterface::class);
         $lockKeyBuilder->expects($this->once())->method('build')->willReturn('test');
 
-        $handler = $this->createMock(HandlerInterface::class);
+        $handler = $this->createMock(CommandHandlerInterface::class);
         $handler->expects($this->once())->method('handle')->willReturn(1);
 
-        $lockWrapper = new LockHandlerWrapper(
+        $lockWrapper = new LockCommandHandlerWrapper(
             lockFactory: $lockFactory,
             keyBuilder: $lockKeyBuilder,
             ttl: 10,
-            handler: $handler
+            wrappedHandler: $handler
         );
 
-        $result = $lockWrapper->handle(new class implements CommandInterface {
-        });
+        $result = $lockWrapper->handle(new stdClass());
 
         $this->assertEquals(1, $result);
     }

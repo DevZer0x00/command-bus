@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\DependencyInjection\Compiler;
 
-use DevZer0x00\CommandBus\BusInterface;
+use DevZer0x00\CommandBus\CommandBusInterface;
 use DevZer0x00\CommandBus\CommandInterface;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -55,7 +55,7 @@ class CommandHandlerPass implements CompilerPassInterface
         $id = EventDispatcherInterface::class;
         $refMaps[$id] = new Reference($id);
 
-        $busDefinition = $container->getDefinition(BusInterface::class);
+        $busDefinition = $container->getDefinition(CommandBusInterface::class);
         $busDefinition->setArgument('$container', ServiceLocatorTagPass::register($container, $refMaps));
         $busDefinition->setArgument('$handlerMap', $handlerMap);
     }
@@ -87,13 +87,10 @@ class CommandHandlerPass implements CompilerPassInterface
         }
 
         $types = $type instanceof ReflectionUnionType ? $type->getTypes() : [$type];
-        $types = array_map(
+
+        return array_map(
             fn(ReflectionNamedType $type): string => $type->getName(),
             $types
         );
-
-        $types = array_filter($types, fn(string $className) => $className !== CommandInterface::class);
-
-        return $types;
     }
 }

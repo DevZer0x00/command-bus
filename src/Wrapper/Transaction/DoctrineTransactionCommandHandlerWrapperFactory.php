@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\Wrapper\Transaction;
 
 use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
-use DevZer0x00\CommandBus\HandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperFactoryInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
 
-readonly class DoctrineTransactionHandlerWrapperFactory implements HandlerWrapperFactoryInterface
+readonly class DoctrineTransactionCommandHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function __construct(
         private ConnectionRegistry $connectionRegistry,
@@ -21,9 +22,9 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements HandlerWrappe
 
     public function factory(
         ReflectionAttribute $attribute,
-        HandlerInterface $wrappedHandler,
-        HandlerInterface $originalHandler
-    ): HandlerInterface {
+        CommandHandlerWrapperInterface $wrappedHandler,
+        CommandHandlerInterface $originalHandler
+    ): CommandHandlerWrapperInterface {
         /** @var DoctrineTransactionalWrapper $transactionAttribute */
         $transactionAttribute = $attribute->newInstance();
 
@@ -32,8 +33,8 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements HandlerWrappe
         /** @var Connection $connection */
         $connection = $this->connectionRegistry->getConnection($connectionName);
 
-        return new DoctrineTransactionHandlerWrapper(
-            handler: $wrappedHandler,
+        return new DoctrineTransactionCommandHandlerWrapper(
+            wrappedHandler: $wrappedHandler,
             connection: $connection,
             transactionStateChecker: $this->transactionStateChecker
         );

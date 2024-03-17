@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-class ContainerBus extends AbstractBus
+class ContainerCommandBus extends AbstractCommandBus
 {
     /**
      * @param array<class-string, string> $handlerMap
@@ -23,7 +23,7 @@ class ContainerBus extends AbstractBus
         parent::__construct(wrapperProcessor: $wrapperProcessor);
     }
 
-    protected function getHandler(CommandInterface $command): HandlerInterface
+    protected function getHandler(object $command): CommandHandlerInterface
     {
         /** @phpstan-ignore-next-line */
         return $this->container->get(
@@ -31,7 +31,7 @@ class ContainerBus extends AbstractBus
         );
     }
 
-    private function getHandlerId(CommandInterface $command): string
+    private function getHandlerId(object $command): string
     {
         if (isset($this->handlerMap[$command::class])) {
             return $this->handlerMap[$command::class];

@@ -20,11 +20,7 @@ class LockKeyBuilderTest extends TestCase
     {
         $attribute = new LockWrapper(commandFields: ['i', 'k']);
 
-        $commandObj = new class implements CommandInterface {
-            public string $i;
-            public string $j;
-            public string $k;
-        };
+        $commandObj = new stdClass();
 
         $commandObj->i = 'test';
         $commandObj->j = 'test1';
@@ -42,11 +38,7 @@ class LockKeyBuilderTest extends TestCase
     {
         $attribute = new LockWrapper(commandFields: ['i', 'k'], lockKey: 'test');
 
-        $commandObj = new class implements CommandInterface {
-            public string $i;
-            public string $j;
-            public string $k;
-        };
+        $commandObj = new stdClass();
 
         $commandObj->i = 'test';
         $commandObj->j = 'test1';
@@ -57,7 +49,7 @@ class LockKeyBuilderTest extends TestCase
         $this->assertEquals('test', $keyBuilder->build($commandObj));
     }
 
-    private function buildKeyFromStrings(CommandInterface $class, array $strings): string
+    private function buildKeyFromStrings(object $class, array $strings): string
     {
         return md5($class::class . json_encode($strings));
     }

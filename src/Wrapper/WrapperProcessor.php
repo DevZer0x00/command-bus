@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper;
 
-use DevZer0x00\CommandBus\HandlerInterface;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
 use ReflectionAttribute;
 use ReflectionClass;
 
@@ -15,12 +15,12 @@ use function iterator_to_array;
 readonly class WrapperProcessor implements WrapperProcessorInterface
 {
     /**
-     * @var array<class-string, HandlerWrapperFactoryInterface>
+     * @var array<class-string, CommandHandlerWrapperFactoryInterface>
      */
     private array $wrapperFactoriesMap;
 
     /**
-     * @param iterable<class-string, HandlerWrapperFactoryInterface> $wrapperFactoriesMap
+     * @param iterable<class-string, CommandHandlerWrapperFactoryInterface> $wrapperFactoriesMap
      */
     public function __construct(
         iterable $wrapperFactoriesMap,
@@ -28,9 +28,10 @@ readonly class WrapperProcessor implements WrapperProcessorInterface
         $this->wrapperFactoriesMap = iterator_to_array($wrapperFactoriesMap);
     }
 
-    public function wrap(HandlerInterface $handler): HandlerInterface
+    public function wrap(CommandHandlerInterface $handler): CommandHandlerInterface
     {
-        $handler = $originalHandler = $handler;
+        $originalHandler = $handler;
+        $handler = new NopCommandHandlerWrapper($handler);
 
         $reflectionClass = new ReflectionClass($originalHandler);
         $attributes = $reflectionClass->getAttributes();

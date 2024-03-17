@@ -6,14 +6,13 @@ namespace Tests\Unit\Stubs\Handler;
 
 use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
-use DevZer0x00\CommandBus\CommandInterface;
-use DevZer0x00\CommandBus\HandlerInterface;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
 
 #[LockWrapper]
 #[DoctrineTransactionalWrapper]
-class WrappedLockTransactionHandlerStub implements HandlerInterface
+class WrappedLockTransactionCommandHandlerStub implements CommandHandlerInterface
 {
-    public function handle(CommandInterface $command): mixed
+    public function handle(object $command): mixed
     {
         return null;
     }

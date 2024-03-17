@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace DevZer0x00\CommandBus\Wrapper\Lock;
 
 use DevZer0x00\CommandBus\Attribute\LockWrapper;
-use DevZer0x00\CommandBus\HandlerInterface;
-use DevZer0x00\CommandBus\Wrapper\HandlerWrapperFactoryInterface;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperFactoryInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use ReflectionAttribute;
 use Symfony\Component\Lock\LockFactory;
 
-readonly class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterface
+readonly class LockCommandHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function __construct(
         private LockFactory $lockFactory,
@@ -19,17 +20,17 @@ readonly class LockHandlerWrapperFactory implements HandlerWrapperFactoryInterfa
 
     public function factory(
         ReflectionAttribute $attribute,
-        HandlerInterface $wrappedHandler,
-        HandlerInterface $originalHandler
-    ): HandlerInterface {
+        CommandHandlerWrapperInterface $wrappedHandler,
+        CommandHandlerInterface $originalHandler
+    ): CommandHandlerWrapperInterface {
         /** @var LockWrapper $lockAttribute */
         $lockAttribute = $attribute->newInstance();
 
-        return new LockHandlerWrapper(
+        return new LockCommandHandlerWrapper(
             lockFactory: $this->lockFactory,
             keyBuilder: new LockKeyBuilder($lockAttribute, $originalHandler::class),
             ttl: $lockAttribute->ttl,
-            handler: $wrappedHandler
+            wrappedHandler: $wrappedHandler
         );
     }
 

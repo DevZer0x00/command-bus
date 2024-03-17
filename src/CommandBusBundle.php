@@ -18,7 +18,7 @@ class CommandBusBundle extends AbstractBundle
 
         $container
             ->addCompilerPass(new CommandHandlerPass())
-            ->registerForAutoconfiguration(HandlerInterface::class)
+            ->registerForAutoconfiguration(CommandHandlerInterface::class)
             ->addTag('app.command_handler');
     }
 

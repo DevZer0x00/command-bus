@@ -19,7 +19,7 @@ readonly class LockKeyBuilder implements LockKeyBuilderInterface
     ) {
     }
 
-    public function build(CommandInterface $command): string
+    public function build(object $command): string
     {
         $params = [];
 

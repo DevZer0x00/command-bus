@@ -6,7 +6,7 @@ namespace DevZer0x00\CommandBus\Wrapper;
 
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 
-interface WrapperProcessorInterface
+interface CommandHandlerWrapperInterface extends CommandHandlerInterface
 {
-    public function wrap(CommandHandlerInterface $handler): CommandHandlerInterface;
+    public function handle(object $command): mixed;
 }

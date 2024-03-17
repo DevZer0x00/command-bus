@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace DevZer0x00\CommandBus\Wrapper\Transaction;
 
-use DevZer0x00\CommandBus\CommandInterface;
-use DevZer0x00\CommandBus\HandlerInterface;
+use DevZer0x00\CommandBus\CommandHandlerInterface;
+use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use Doctrine\DBAL\Driver\Connection;
 use Throwable;
 
-class DoctrineTransactionHandlerWrapper implements HandlerInterface
+class DoctrineTransactionCommandHandlerWrapper implements CommandHandlerWrapperInterface
 {
     private bool $starter = false;
 
     public function __construct(
-        private readonly HandlerInterface $handler,
+        private readonly CommandHandlerWrapperInterface $wrappedHandler,
         private readonly Connection $connection,
         private readonly DoctrineTransactionStateCheckerInterface $transactionStateChecker,
     ) {
     }
 
-    public function handle(CommandInterface $command): mixed
+    public function handle(object $command): mixed
     {
         if (!$this->transactionStateChecker->inTransaction($this->connection)) {
             $this->connection->beginTransaction();
@@ -28,7 +28,7 @@ class DoctrineTransactionHandlerWrapper implements HandlerInterface
         }
 
         try {
-            $result = $this->handler->handle($command);
+            $result = $this->wrappedHandler->handle($command);
 
             if ($this->starter) {
                 $this->connection->commit();
