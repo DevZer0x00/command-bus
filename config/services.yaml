@@ -10,3 +10,7 @@ services:
     arguments:
       $wrapperProcessor: '@DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface'
       $eventDispatcher: '@event_dispatcher'
+
+  DevZer0x00\CommandBus\Console\Command\CommandHandlerDebugCommand:
+    tags:
+      - { name: console.command }

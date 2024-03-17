@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DevZer0x00\CommandBus\Wrapper\Transaction;
+namespace DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL;
 
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
 use Doctrine\DBAL\Connection;
 use Throwable;
 
-class DoctrineTransactionHandlerWrapper implements CommandHandlerWrapperInterface
+class DBALTransactionHandlerWrapper implements CommandHandlerWrapperInterface
 {
     private bool $starter = false;
 

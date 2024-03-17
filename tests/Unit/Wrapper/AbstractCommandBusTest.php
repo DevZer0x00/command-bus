@@ -11,6 +11,7 @@ use DevZer0x00\CommandBus\Wrapper\WrapperProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AbstractCommandBusTest extends TestCase
 {
@@ -36,12 +37,17 @@ class AbstractCommandBusTest extends TestCase
         WrapperProcessorInterface|MockObject $wrapperProcessor,
         CommandHandlerInterface $commandHandler,
     ): AbstractCommandBus {
-        return new class($wrapperProcessor, $commandHandler) extends AbstractCommandBus {
+        return new class(
+            $wrapperProcessor,
+            $commandHandler,
+            $this->createMock(EventDispatcherInterface::class)
+        ) extends AbstractCommandBus {
             public function __construct(
                 WrapperProcessorInterface $wrapperProcessor,
-                private readonly CommandHandlerInterface $commandHandler
+                private readonly CommandHandlerInterface $commandHandler,
+                private readonly EventDispatcherInterface $eventDispatcher,
             ) {
-                parent::__construct($wrapperProcessor);
+                parent::__construct($wrapperProcessor, $this->eventDispatcher);
             }
 
             protected function getHandler(mixed $command): CommandHandlerInterface

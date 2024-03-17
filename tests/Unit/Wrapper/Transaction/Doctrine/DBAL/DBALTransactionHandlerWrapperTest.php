@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Wrapper\Transaction;
+namespace Tests\Unit\Wrapper\Transaction\Doctrine\DBAL;
 
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
+use DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL\DBALTransactionHandlerWrapper;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
 
-class DoctrineTransactionHandlerWrapperTest extends TestCase
+class DBALTransactionHandlerWrapperTest extends TestCase
 {
-    private DoctrineTransactionHandlerWrapper $handlerWrapper;
+    private DBALTransactionHandlerWrapper $handlerWrapper;
     private CommandHandlerInterface|MockObject $handler;
     private Connection|MockObject $connection;
 
@@ -25,7 +25,7 @@ class DoctrineTransactionHandlerWrapperTest extends TestCase
 
         $this->handler = $this->createMock(CommandHandlerWrapperInterface::class);
 
-        $this->handlerWrapper = new DoctrineTransactionHandlerWrapper(
+        $this->handlerWrapper = new DBALTransactionHandlerWrapper(
             wrappedHandler: $this->handler,
             connection: $this->connection,
         );

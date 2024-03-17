@@ -2,29 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Wrapper\Transaction;
+namespace Tests\Unit\Wrapper\Transaction\Doctrine\DBAL;
 
-use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\DoctrineDBALTransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\DoctrineORMTransactionalWrapper;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapper;
-use DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapperFactory;
+use DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL\DBALTransactionHandlerWrapper;
+use DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL\DBALTransactionHandlerWrapperFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionAttribute;
 
-class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
+class DBALTransactionHandlerWrapperFactoryTest extends TestCase
 {
-    private DoctrineTransactionHandlerWrapperFactory $factory;
+    private DBALTransactionHandlerWrapperFactory $factory;
     private ConnectionRegistry|MockObject $registry;
 
     protected function setUp(): void
     {
         $this->registry = $this->createMock(ConnectionRegistry::class);
 
-        $this->factory = new DoctrineTransactionHandlerWrapperFactory(
+        $this->factory = new DBALTransactionHandlerWrapperFactory(
             connectionRegistry: $this->registry,
         );
     }
@@ -40,7 +41,7 @@ class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
         $refl = $this->createMock(ReflectionAttribute::class);
         $refl->expects($this->once())
             ->method('newInstance')
-            ->willReturn(new DoctrineTransactionalWrapper());
+            ->willReturn(new DoctrineORMTransactionalWrapper());
 
         $handler = $this->factory->factory(
             attribute: $refl,
@@ -48,14 +49,14 @@ class DoctrineTransactionHandlerWrapperFactoryTest extends TestCase
             originalHandler: $this->createMock(CommandHandlerInterface::class)
         );
 
-        $this->assertInstanceOf(DoctrineTransactionHandlerWrapper::class, $handler);
+        $this->assertInstanceOf(DBALTransactionHandlerWrapper::class, $handler);
     }
 
     public function testGetDefaultAttributeName()
     {
         $this->assertEquals(
-            DoctrineTransactionalWrapper::class,
-            DoctrineTransactionHandlerWrapperFactory::getDefaultAttributeName()
+            DoctrineDBALTransactionalWrapper::class,
+            DBALTransactionHandlerWrapperFactory::getDefaultAttributeName()
         );
     }
 }

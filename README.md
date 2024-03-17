@@ -13,7 +13,7 @@ composer require devzer0x00/command-bus
 
 На данный момент пакет включает в себя два вида оберток:
 1. LockHandlerWrapper
-2. DoctrineTransactionHandlerWrapper
+2. [ORM,DBAL]TransactionHandlerWrapper
 
 Для того чтобы использовать обертки, их необходимо прописать в **config/services.yaml**
 
@@ -25,9 +25,15 @@ services:
     tags:
       - { name: app.command_handler.wrapper_factory, priority: -100 }
 
-  DevZer0x00\CommandBus\Wrapper\Transaction\DoctrineTransactionHandlerWrapperFactory:
+  DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL\DBALTransactionHandlerWrapperFactory:
     arguments:
       $connectionRegistry: '@doctrine'
+    tags:
+      - { name: app.command_handler.wrapper_factory, priority: -90 }
+    
+  DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\ORM\ORMTransactionHandlerWrapperFactory:
+    arguments:
+      $managerRegistry: '@doctrine'
     tags:
       - { name: app.command_handler.wrapper_factory, priority: -90 }
 ```

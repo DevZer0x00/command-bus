@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DevZer0x00\CommandBus\Wrapper\Transaction;
+namespace DevZer0x00\CommandBus\Wrapper\Transaction\Doctrine\DBAL;
 
-use DevZer0x00\CommandBus\Attribute\DoctrineTransactionalWrapper;
+use DevZer0x00\CommandBus\Attribute\DoctrineDBALTransactionalWrapper;
 use DevZer0x00\CommandBus\CommandHandlerInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperFactoryInterface;
 use DevZer0x00\CommandBus\Wrapper\CommandHandlerWrapperInterface;
@@ -12,7 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ConnectionRegistry;
 use ReflectionAttribute;
 
-readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
+readonly class DBALTransactionHandlerWrapperFactory implements CommandHandlerWrapperFactoryInterface
 {
     public function __construct(
         private ConnectionRegistry $connectionRegistry,
@@ -24,7 +24,7 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandle
         CommandHandlerWrapperInterface $wrappedHandler,
         CommandHandlerInterface $originalHandler
     ): CommandHandlerWrapperInterface {
-        /** @var DoctrineTransactionalWrapper $transactionAttribute */
+        /** @var DoctrineDBALTransactionalWrapper $transactionAttribute */
         $transactionAttribute = $attribute->newInstance();
 
         $connectionName = $transactionAttribute->connection;
@@ -32,7 +32,7 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandle
         /** @var Connection $connection */
         $connection = $this->connectionRegistry->getConnection($connectionName);
 
-        return new DoctrineTransactionHandlerWrapper(
+        return new DBALTransactionHandlerWrapper(
             wrappedHandler: $wrappedHandler,
             connection: $connection,
         );
@@ -40,6 +40,6 @@ readonly class DoctrineTransactionHandlerWrapperFactory implements CommandHandle
 
     public static function getDefaultAttributeName(): string
     {
-        return DoctrineTransactionalWrapper::class;
+        return DoctrineDBALTransactionalWrapper::class;
     }
 }
